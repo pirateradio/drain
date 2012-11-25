@@ -1,6 +1,6 @@
 # drain
 
-Acts as a log drain to send metrics to Librato
+Log drain to send metrics from Papertrail to Librato
 
 ## Usage
 
