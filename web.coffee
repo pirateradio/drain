@@ -74,9 +74,9 @@ app.post "/logs", (req, res) ->
           logger.error err
           res.send "error", 422
         else
+          logger.success()
           for gauge in gauges
-            console.log gauge
-            logger.success metric:gauge.name, value:gauge.value, source:gauge.source
+            log.success metric:gauge.name, value:gauge.value, source:gauge.source
           res.send "ok"
     catch err
       console.log "eee"
