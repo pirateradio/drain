@@ -58,7 +58,7 @@ app.post "/logs", (req, res) ->
           sorted = values.sort()
           sum    = sorted.reduce (ax, n) -> ax+n
           if has_values[name]
-            gauges.push create_gauge("#{name}.mean",   source, (sum / sorted.length).toFixed(3),    units[name], "average")
+            gauges.push create_gauge("#{name}.mean",   source, (sum / sorted.length).toFixed(3),        units[name], "average")
             gauges.push create_gauge("#{name}.perc95", source, sorted[Math.ceil(0.95*sorted.length)-1], units[name], "average")
             gauges.push create_gauge("#{name}.count",  source, sorted.length,                           "count",     "sum")
           else
