@@ -33,9 +33,7 @@ app.post "/logs", (req, res) ->
     console.log "bbb"
     try
       for entry in JSON.parse(req.body.payload).events
-        console.log entry.message
         if pairs = entry.message.match(/([a-zA-Z0-9\_\-\.]+)=?(([a-zA-Z0-9\.\-\_\.]+)|("([^\"]+)"))?/g)
-          console.log pairs
           attrs = {}
           for pair in pairs
             parts = pair.split("=")
@@ -43,13 +41,11 @@ app.post "/logs", (req, res) ->
             value = parts.join("=")
             value = value.substring(1, value.length-1) if value[0] is '"'
             attrs[key] = value
-          console.log attrs
           if attrs.measure
             name = attrs.measure
             name = "#{attrs.ns}.#{name}" if attrs.ns
             source = attrs.source || ""
             value = attrs.value || attrs.val
-            console.log "name:#{name} value:#{value}"
             measurements[name] ||= {}
             measurements[name][source] ||= []
             measurements[name][source].push(parseInt(value || "1"))
@@ -57,7 +53,6 @@ app.post "/logs", (req, res) ->
             has_values[name] = true if value
       console.log "ccc"
       gauges = []
-      console.log measurements
       for name, source_values of measurements
         for source, values of source_values
           sorted = values.sort()
