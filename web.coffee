@@ -25,12 +25,10 @@ app.get "/", (req, res) ->
   res.send "ok"
 
 app.post "/logs", (req, res) ->
-  console.log "aaa"
   measurements = {}
   units = {}
   has_values = {}
   log.start "logs", (logger) ->
-    console.log "bbb"
     try
       for entry in JSON.parse(req.body.payload).events
         if pairs = entry.message.match(/([a-zA-Z0-9\_\-\.]+)=?(([a-zA-Z0-9\.\-\_\.]+)|("([^\"]+)"))?/g)
@@ -51,7 +49,6 @@ app.post "/logs", (req, res) ->
             measurements[name][source].push(parseInt(value || "1"))
             units[name] ||= attrs.units
             has_values[name] = true if value
-      console.log "ccc"
       gauges = []
       for name, source_values of measurements
         for source, values of source_values
@@ -63,7 +60,6 @@ app.post "/logs", (req, res) ->
             gauges.push create_gauge("#{name}.count",  source, sorted.length,                           "count",     "sum")
           else
             gauges.push create_gauge("#{name}.count", source, sorted.length, "count", "sum")
-      console.log "ddd"
       librato.post "/metrics", gauges:gauges, (err, result) ->
         if err
           logger.error err
@@ -74,7 +70,6 @@ app.post "/logs", (req, res) ->
             log.success metric:gauge.name, value:gauge.value, source:gauge.source
           res.send "ok"
     catch err
-      console.log "eee"
       logger.error err
       res.send "error", 422
 
