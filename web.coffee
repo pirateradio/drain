@@ -46,7 +46,9 @@ app.post "/logs", (req, res) ->
             value = attrs.value || attrs.val
             measurements[name] ||= {}
             measurements[name][source] ||= []
-            measurements[name][source].push(parseInt(value || "1"))
+            int_value = parseInt(value || "1")
+            int_value = 0 if isNaN(int_value)
+            measurements[name][source].push int_value
             units[name] ||= attrs.units
             has_values[name] = true if value
       gauges = []
